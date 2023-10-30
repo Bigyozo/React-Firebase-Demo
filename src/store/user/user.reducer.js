@@ -5,7 +5,7 @@ export const UserReducer = (state = initialState.users, action) => {
     case Actions.SIGN_IN:
       return {
         ...state,
-        ...action.payload,
+        ...action.payload
       };
     default:
       return state;

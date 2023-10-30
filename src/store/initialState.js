@@ -1,10 +1,10 @@
 const initialState = {
   products: {},
   users: {
-    icon: "",
     isSignedIn: false,
+    role: "",
     uid: "",
-    username: "",
-  },
+    username: ""
+  }
 };
 export default initialState;

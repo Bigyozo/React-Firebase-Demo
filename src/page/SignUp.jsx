@@ -1,7 +1,11 @@
-import React, { useState } from "react";
-import { useCallback } from "react";
-import { TextInput } from "./component";
+import React, { useCallback, useState } from "react";
+import { PrimaryButton, TextInput } from "./component";
+import { signUp } from "../store/user/user.operation";
+import { useDispatch } from "react-redux";
+
 const SignUp = () => {
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState(""),
     [email, setEmail] = useState(""),
     [password, setPassword] = useState(""),
@@ -9,25 +13,25 @@ const SignUp = () => {
 
   const inputUsername = useCallback(
     (event) => {
-      setUsername(event.target.vale);
+      setUsername(event.target.value);
     },
     [setUsername]
   );
   const inputEmail = useCallback(
     (event) => {
-      setEmail(event.target.vale);
+      setEmail(event.target.value);
     },
     [setEmail]
   );
   const inputPassword = useCallback(
     (event) => {
-      setPassword(event.target.vale);
+      setPassword(event.target.value);
     },
     [setPassword]
   );
   const inputConfirmPassword = useCallback(
     (event) => {
-      setConfirmPassword(event.target.vale);
+      setConfirmPassword(event.target.value);
     },
     [setConfirmPassword]
   );
@@ -76,6 +80,13 @@ const SignUp = () => {
         type={"password"}
         onChange={inputConfirmPassword}
       ></TextInput>
+      <div className="module-spacer--medium "></div>
+      <div className="center">
+        <PrimaryButton
+          label={"アカウントを登録する"}
+          onClick={() => dispatch(signUp(username, email, password, confirmPassword))}
+        ></PrimaryButton>
+      </div>
     </div>
   );
 };
