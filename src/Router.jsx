@@ -1,14 +1,17 @@
 import React from "react";
-import { Switch, Route } from "react-router";
-import { Login, Home, SignUp, SignIn } from "./page";
+import { Route, Switch } from "react-router";
+import { Home, Reset, SignIn, SignUp } from "./page";
+import Auth from "./Auth";
 
 const Router = () => {
   return (
     <Switch>
-      <Route exact path={"/login"} component={Login}></Route>
       <Route exact path={"/signup"} component={SignUp}></Route>
       <Route exact path={"/signin"} component={SignIn}></Route>
-      <Route exact path={"(/)?"} component={Home}></Route>
+      <Route exact path={"/signin/reset"} component={Reset}></Route>
+      <Auth>
+        <Route exact path={"(/)?"} component={Home}></Route>
+      </Auth>
     </Switch>
   );
 };

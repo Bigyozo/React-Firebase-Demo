@@ -1,5 +1,5 @@
 import { push } from "connected-react-router";
-import { signInAction } from "./user.action";
+import { signInAction, signOutAction } from "./user.action";
 import { auth, db, FirebaseTimeStamp } from "../../firebase";
 
 export const ownerSignIn = () => {
@@ -15,12 +15,40 @@ export const ownerSignIn = () => {
       dispatch(
         signInAction({
           isSignedIn: true,
-          uid: "0002",
+          role: "owner",
+          uid: "A1111",
           username: username
         })
       );
       dispatch(push("/"));
     }
+  };
+};
+
+export const listenAuthState = () => {
+  return async (dispatch) => {
+    return auth.onAuthStateChanged((user) => {
+      if (user) {
+        const uid = user.uid;
+        db.collection("users")
+          .doc(uid)
+          .get()
+          .then((snapshot) => {
+            const data = snapshot.data();
+            dispatch(
+              signInAction({
+                isSignedIn: true,
+                role: data.role,
+                uid: uid,
+                username: data.username
+              })
+            );
+            dispatch(push("/"));
+          });
+      } else {
+        dispatch(push("/signin"));
+      }
+    });
   };
 };
 
@@ -87,5 +115,33 @@ export const signIn = (email, password) => {
           });
       }
     });
+  };
+};
+
+export const signOut = () => {
+  return async (dispatch) => {
+    auth.signOut().then(() => {
+      dispatch(signOutAction());
+      dispatch(push("/signin"));
+    });
+  };
+};
+
+export const resetPassword = (email) => {
+  return async (dispatch) => {
+    if (email === "") {
+      alert("必須項目が未入力です");
+      return false;
+    } else {
+      auth
+        .sendPasswordResetEmail(email)
+        .then(() => {
+          alert("メールアドレスリセットします");
+          dispatch(push("/signin"));
+        })
+        .catch(() => {
+          alert("メールアドレスリセットに失敗しました");
+        });
+    }
   };
 };
