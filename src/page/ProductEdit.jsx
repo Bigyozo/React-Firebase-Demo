@@ -1,7 +1,11 @@
 import React, { useState, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import { PrimaryButton, SelectBox, TextInput } from "./component";
+import { saveProduct } from "../store/product/product.operation";
 
 const ProductEdit = () => {
+  const dispatch = useDispatch();
+
   const [name, setName] = useState(""),
     [description, setDescription] = useState(""),
     [category, setCategory] = useState(""),
@@ -86,7 +90,10 @@ const ProductEdit = () => {
         ></TextInput>
         <div className="module-spacer--medium"></div>
         <div className="center">
-          <PrimaryButton label={"商品情報を保存"}></PrimaryButton>
+          <PrimaryButton
+            label={"商品情報を保存"}
+            onClick={() => dispatch(saveProduct(name, description, category, gender, price))}
+          ></PrimaryButton>
         </div>
       </div>
     </section>
