@@ -54,7 +54,8 @@ const ImageArea = (props) => {
   return (
     <div>
       <div className="p-grid__list-images">
-        {props.images.length > 0 &&
+        {props.images &&
+          props.images.length > 0 &&
           props.images.map((image) => (
             <ImagePreview delete={deleteImage} id={image.id} path={image.path} key={image.id} />
           ))}

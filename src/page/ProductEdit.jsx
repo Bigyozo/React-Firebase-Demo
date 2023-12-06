@@ -1,11 +1,16 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { PrimaryButton, SelectBox, TextInput } from "./component";
+import { db } from "../firebase";
 import { saveProduct } from "../store/product/product.operation";
+import { PrimaryButton, SelectBox, TextInput } from "./component";
 import ImageArea from "./Products/ImageArea";
 
 const ProductEdit = () => {
   const dispatch = useDispatch();
+  let id = window.location.pathname.split("/product/edit")[1];
+  if (id !== "") {
+    id = id.split("/")[1];
+  }
 
   const [name, setName] = useState(""),
     [description, setDescription] = useState(""),
@@ -41,6 +46,23 @@ const ProductEdit = () => {
     { id: "male", name: "男性" },
     { id: "female", name: "女性" }
   ];
+
+  useEffect(() => {
+    if (id !== "") {
+      db.collection("products")
+        .doc(id)
+        .get()
+        .then((snapshot) => {
+          const data = snapshot.data();
+          setName(data.name);
+          setCategory(data.category);
+          setDescription(data.description);
+          setGender(data.gender);
+          setPrice(data.price);
+          setImages(data.images);
+        });
+    }
+  }, [id]);
 
   return (
     <section>
@@ -96,7 +118,7 @@ const ProductEdit = () => {
           <PrimaryButton
             label={"商品情報を保存"}
             onClick={() =>
-              dispatch(saveProduct(name, description, category, gender, price, images))
+              dispatch(saveProduct(id, name, description, category, gender, price, images))
             }
           ></PrimaryButton>
         </div>
