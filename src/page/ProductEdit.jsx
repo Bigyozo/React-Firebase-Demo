@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { db } from "../firebase";
 import { saveProduct } from "../store/product/product.operation";
 import { PrimaryButton, SelectBox, TextInput } from "./component";
-import ImageArea from "./Products/ImageArea";
+import { ImageArea, SetSizeArea } from "./Products";
 
 const ProductEdit = () => {
   const dispatch = useDispatch();
@@ -17,7 +17,8 @@ const ProductEdit = () => {
     [category, setCategory] = useState(""),
     [gender, setGender] = useState(""),
     [images, setImages] = useState([]),
-    [price, setPrice] = useState("");
+    [price, setPrice] = useState(""),
+    [sizes, setSizes] = useState([]);
 
   const inputName = useCallback(
     (event) => {
@@ -60,6 +61,7 @@ const ProductEdit = () => {
           setGender(data.gender);
           setPrice(data.price);
           setImages(data.images);
+          setSizes(data.sizes);
         });
     }
   }, [id]);
@@ -113,12 +115,14 @@ const ProductEdit = () => {
           value={price}
           type={"number"}
         ></TextInput>
-        <div className="module-spacer--medium"></div>
+        <div className="module-spacer--small"></div>
+        <SetSizeArea sizes={sizes} setSizes={setSizes}></SetSizeArea>
+        <div className="module-spacer--small"></div>
         <div className="center">
           <PrimaryButton
             label={"商品情報を保存"}
             onClick={() =>
-              dispatch(saveProduct(id, name, description, category, gender, price, images))
+              dispatch(saveProduct(id, name, description, category, gender, price, images, sizes))
             }
           ></PrimaryButton>
         </div>
