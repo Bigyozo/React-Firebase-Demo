@@ -1,8 +1,22 @@
 import { db, FirebaseTimeStamp } from "../../firebase";
 import { push } from "connected-react-router";
 import { fetchProductsAction } from "./product.action";
+import { deleteProductAction } from "./product.action";
 
 const productsRef = db.collection("products");
+
+export const deleteProduct = (id) => {
+  return async (dispatch, getState) => {
+    productsRef
+      .doc(id)
+      .delete()
+      .then(() => {
+        const prevProducts = getState().products.list;
+        const nextProducts = prevProducts.filter((product) => product.id !== id);
+        dispatch(deleteProductAction(nextProducts));
+      });
+  };
+};
 
 export const saveProduct = (id, name, description, category, gender, price, images, sizes) => {
   return async (dispatch) => {
