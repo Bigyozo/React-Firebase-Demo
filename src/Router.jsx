@@ -1,17 +1,18 @@
 import React from "react";
 import { Route, Switch } from "react-router";
-import { Home, ProductEdit, ProductList, Reset, SignIn, SignUp } from "./page";
+import { authRoutes, routes } from "../src/config/routes";
 import Auth from "./Auth";
 
 const Router = () => {
   return (
     <Switch>
-      <Route exact path={"/signup"} component={SignUp}></Route>
-      <Route exact path={"/signin"} component={SignIn}></Route>
-      <Route exact path={"/signin/reset"} component={Reset}></Route>
+      {routes.map((item) => (
+        <Route {...item}></Route>
+      ))}
       <Auth>
-        <Route exact path={"(/)?"} component={ProductList}></Route>
-        <Route path={"/product/edit(/:id)?"} component={ProductEdit}></Route>
+        {authRoutes.map((item) => (
+          <Route {...item}></Route>
+        ))}
       </Auth>
     </Switch>
   );
